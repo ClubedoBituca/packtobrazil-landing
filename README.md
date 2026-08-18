@@ -25,7 +25,7 @@ Tudo que muda com frequência está em [`src/config/site.ts`](src/config/site.ts
 | `externalLinks.liveGroup` | Botão "Grupo ao vivo" → grupo "Compras ao Vivo" no WhatsApp. |
 | `externalLinks.support` | Botão "Atendimento" → WhatsApp individual. |
 | `externalLinks.instagram` | Perfil oficial: link do rodapé e `sameAs` do JSON-LD. Não é botão de comando. |
-| `NEXT_PUBLIC_SITE_URL` | Domínio de produção, usado em `metadataBase`, no Open Graph, no `robots.txt`, no `sitemap.xml` e no JSON-LD. Fallback: `https://packtobrazil.com`. |
+| `NEXT_PUBLIC_SITE_URL` | Domínio de produção, usado em `metadataBase`, no Open Graph, no `robots.txt`, no `sitemap.xml` e no JSON-LD. Fallback: `https://packtobrazil.com`. **Também controla a indexação** — ver Deploy. |
 
 ## Estrutura
 
@@ -87,6 +87,24 @@ A medição está em `audit.py` (scratchpad da sessão): para cada elemento ele 
 ### Regerando os assets de marca
 
 As artes em `public/` saem dos originais em `identidade/`. Ao substituir um logo lá, regere `public/logo/{light,dark}.png` mantendo a proporção atual (o conteúdo ocupa 523/600 da tela quadrada), que é o que preserva o tamanho óptico da marca no hero. Basta um PNG de 384px por tema: o `next/image` gera as demais densidades.
+
+## Deploy
+
+Hospedado na Vercel, conectado ao repositório: todo push na `main` publica em produção e cada branch ganha uma URL de preview. O build não precisa de configuração — a Vercel detecta o Next.js sozinha.
+
+### Indexação
+
+`isIndexable` (em [`src/config/site.ts`](src/config/site.ts)) libera buscadores **apenas** quando `NEXT_PUBLIC_SITE_URL` é exatamente o domínio definitivo. Fora disso, `robots.txt` responde `Disallow: /` e a metadata manda `noindex, nofollow`.
+
+O padrão é fechado de propósito: uma URL provisória indexada vira conteúdo duplicado concorrendo com o domínio real depois, e não há como despublicar rápido do índice.
+
+| Situação | `NEXT_PUBLIC_SITE_URL` | Resultado |
+|---|---|---|
+| Local e previews de branch | não definida | `noindex`, `Disallow: /` |
+| Primeira versão no `*.vercel.app` | a URL do deploy | `noindex`, mas canonical e Open Graph corretos para quem abrir o link |
+| Domínio no ar | `https://packtobrazil.com` | indexação liberada, `sitemap.xml` e agentes de IA incluídos |
+
+Ao apontar o domínio definitivo, mude a variável na Vercel e **refaça o deploy** — `robots.txt` e a metadata são gerados no build.
 
 ## Leitura por crawlers e agentes
 

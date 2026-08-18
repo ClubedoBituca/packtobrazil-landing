@@ -3,6 +3,9 @@
  * Nenhum componente deve conter URL hardcoded — importe daqui.
  */
 
+/** Endereço definitivo da marca. Só ele é liberado para buscadores. */
+const CANONICAL_ORIGIN = 'https://packtobrazil.com'
+
 export const site = {
   name: 'Pack to Brazil',
   title: 'Pack to Brazil | Compras dos EUA direto para o Brasil',
@@ -12,10 +15,23 @@ export const site = {
     'suíte com 60 dias de armazenamento gratuito e rastreio até a sua porta.',
   /** Frase oficial da marca — identidadevisual.md. */
   slogan: 'Dos EUA diretamente para o seu endereço, sem sair de casa!',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://packtobrazil.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? CANONICAL_ORIGIN,
   locale: 'pt-BR',
   instagramHandle: '@packtobrazil',
 } as const
+
+/**
+ * Libera buscadores e agentes de IA apenas quando o deploy está servindo o
+ * domínio definitivo.
+ *
+ * Enquanto a landing vive numa URL temporária (`*.vercel.app`, preview de
+ * branch), `robots.txt` bloqueia tudo e a metadata manda `noindex` — uma URL
+ * provisória indexada vira conteúdo duplicado concorrendo com o domínio real
+ * depois. O padrão é fechado de propósito: só abre quando alguém aponta
+ * `NEXT_PUBLIC_SITE_URL` para o endereço oficial, o que só acontece quando o
+ * domínio está de fato no ar.
+ */
+export const isIndexable = process.env.NEXT_PUBLIC_SITE_URL === CANONICAL_ORIGIN
 
 export const externalLinks = {
   /** App Store (iOS). */

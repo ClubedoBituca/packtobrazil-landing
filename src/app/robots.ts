@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { site } from '@/config/site'
+import { isIndexable, site } from '@/config/site'
 
 /**
  * Agentes de IA e buscadores com regra própria.
@@ -31,6 +31,11 @@ const aiAgents = [
 ]
 
 export default function robots(): MetadataRoute.Robots {
+  // URL provisória: nada entra em buscador, e sem apontar o sitemap.
+  if (!isIndexable) {
+    return { rules: [{ userAgent: '*', disallow: '/' }] }
+  }
+
   return {
     rules: [
       { userAgent: '*', allow: '/' },

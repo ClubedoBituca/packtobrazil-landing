@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
-import { site } from '@/config/site'
+import { isIndexable, site } from '@/config/site'
 import { DEFAULT_THEME, browserBarColor, themeInitScript } from '@/lib/theme'
 import './globals.css'
 
@@ -40,19 +40,22 @@ export const metadata: Metadata = {
     ],
     apple: { url: '/apple-icon.png', sizes: '180x180' },
   },
-  // Sem restrição de trecho ou de imagem: buscadores e assistentes podem citar
-  // a página por inteiro.
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-snippet': -1,
-      'max-image-preview': 'large',
-      'max-video-preview': -1,
-    },
-  },
+  // No domínio definitivo, sem restrição de trecho ou de imagem: buscadores e
+  // assistentes podem citar a página por inteiro. Fora dele, `noindex` —
+  // ver `isIndexable` em config/site.ts.
+  robots: isIndexable
+    ? {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-snippet': -1,
+          'max-image-preview': 'large',
+          'max-video-preview': -1,
+        },
+      }
+    : { index: false, follow: false },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
