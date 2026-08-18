@@ -8,18 +8,24 @@
 /* ---------------------------------------------------------------------------
    Cores fixas da marca — identidadevisual.md.
    Não mudam com o tema; servem de matéria-prima para os papéis semânticos.
+
+   As sete são a paleta Canvas do cliente e ocupam uma faixa estreita de matiz
+   (40°–80°): oliva e creme, sem nenhuma cor fria. Por isso o acento não sai
+   daqui — ver `--color-kraft` abaixo.
    --------------------------------------------------------------------------- */
 @theme {
-  --color-olive: #3d422b;
-  --color-olive-soft: #5a6142;
-  --color-cream: #f1e9d9;
-  --color-cream-light: #faf6ee;
-  --color-warm-white: #ffffff;
-  --color-neutral-light: #e5e5e7;
+  --color-olive: #34401c;
+  --color-olive-deep: #475905;
+  --color-olive-mid: #4e5925;
+  --color-sage: #9fa66f;
+  --color-sand: #e3d6b8;
+  --color-cream: #f2ebdc;
+  --color-cream-light: #f4f1eb;
 
-  /* Acentos derivados do papelão kraft da arte de fundo. */
+  /* Único tom fora da paleta Canvas: o papelão kraft da arte de fundo. Numa
+     paleta inteiramente oliva não sobra nada que leia como ênfase — o destaque
+     precisa de matiz própria (25°) para não virar "mais um verde". */
   --color-kraft: #a85c22;
-  --color-kraft-light: #c6772f;
   --color-whats: #1b7f45;
 
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
@@ -52,50 +58,60 @@
 }
 
 /* Tema claro — é o padrão, inclusive na primeira visita.
-   Contraste sobre `--surface`: ink 8.6:1, ink-muted 5.8:1, ink-subtle 5.7:1,
-   accent 4.8:1. A folga acima de 4.5:1 é proposital: a arte de fundo passa
-   por baixo do texto e escurece pontos do creme. */
+   Contraste sobre `--surface`: ink 9.3:1, ink-muted 6.4:1, ink-subtle 6.6:1,
+   accent 4.9:1. A folga acima de 4.5:1 é proposital: a arte de fundo passa
+   por baixo do texto e escurece pontos do creme.
+
+   `ink-subtle` tem contraste um fio acima de `ink-muted` de propósito, e não é
+   engano: os dois olivas da paleta ficam a 0.2 de distância — diferença que
+   ninguém enxerga — então o que separa os papéis aqui é a saturação, não o
+   contraste. O corpo de texto leva o mais neutro (#4e5925, 41%), porque bloco
+   longo em verde vivo cansa; os rótulos miúdos levam o mais saturado
+   (#475905, 89%), onde a vivacidade rende sem dominar. */
 :root {
   color-scheme: light;
 
-  --surface: #f1e9d9;
-  --surface-raised: #faf6ee;
-  --ink: #3d422b;
-  --ink-muted: #565c3e;
-  --ink-subtle: #575d47;
+  --surface: #f2ebdc;
+  --surface-raised: #f4f1eb;
+  --ink: #34401c;
+  --ink-muted: #4e5925;
+  --ink-subtle: #475905;
   --accent: #9a5220;
   --accent-hover: #b8642a;
-  --hairline: #3d422b;
+  --hairline: #34401c;
   --glass: rgb(255 255 255 / 0.6);
-  --strip: #3d422b;
-  --cta-app: #3d422b;
-  --cta-app-ink: #faf6ee;
+  --strip: #34401c;
+  --cta-app: #34401c;
+  --cta-app-ink: #f4f1eb;
 
   /* Moldura sempre escura do player, nos dois temas. */
-  --screen: #3d422b;
-  --screen-glow: #4d5436;
+  --screen: #34401c;
+  --screen-glow: #475905;
 
-  --shadow-card-value: 0 24px 60px -30px rgb(61 66 43 / 0.45);
-  --shadow-cta-value: 0 16px 32px -18px rgb(61 66 43 / 0.85);
+  --shadow-card-value: 0 24px 60px -30px rgb(52 64 28 / 0.45);
+  --shadow-cta-value: 0 16px 32px -18px rgb(52 64 28 / 0.85);
 }
 
 /* Tema escuro.
-   Contraste sobre `--surface`: ink 14:1, ink-muted 8.6:1, ink-subtle 5.5:1,
+   A paleta Canvas não traz fundo escuro, então as duas superfícies continuam
+   nos olivas quase pretos já usados — matiz 78°, dentro da faixa da paleta.
+   As tintas, essas, saem todas da Canvas.
+   Contraste sobre `--surface`: ink 14.2:1, ink-muted 11.7:1, ink-subtle 6.6:1,
    accent 6.9:1. */
 :root[data-theme='dark'] {
   color-scheme: dark;
 
   --surface: #1b1e14;
   --surface-raised: #262a1c;
-  --ink: #f1e9d9;
-  --ink-muted: #bfb9aa;
-  --ink-subtle: #979386;
+  --ink: #f2ebdc;
+  --ink-muted: #e3d6b8;
+  --ink-subtle: #9fa66f;
   --accent: #e0954c;
   --accent-hover: #f0a862;
-  --hairline: #f1e9d9;
-  --glass: rgb(241 233 217 / 0.1);
-  --strip: #5a6142;
-  --cta-app: #f1e9d9;
+  --hairline: #f2ebdc;
+  --glass: rgb(242 235 220 / 0.1);
+  --strip: #4e5925;
+  --cta-app: #f2ebdc;
   --cta-app-ink: #1b1e14;
 
   --screen: #11140c;

@@ -80,7 +80,7 @@ O véu por cima (`BackgroundArt.tsx`) segura o contraste do texto; o rodapé, qu
 
 ### Contraste
 
-Todos os textos passam em WCAG AA nos dois temas — mínimo medido 4,72:1 no claro e 5,04:1 no escuro; elementos de interface, 3,79:1 (mínimo 3:1).
+Todos os textos passam em WCAG AA nos dois temas. Depois da migração para a paleta Canvas, os papéis semânticos medem, sobre `--surface`: no claro `ink` 9,3:1, `ink-muted` 6,4:1, `ink-subtle` 6,6:1 e `accent` 4,9:1; no escuro 14,2:1, 11,7:1, 6,6:1 e 6,9:1. Medido no navegador contra o pior pixel de fundo real (a arte passa por baixo e escurece o creme), o mínimo é 4,67:1 no claro — o link do rodapé — e 6,55:1 no escuro. Os botões de WhatsApp ficam em 5,04:1.
 
 A medição está em `audit.py` (scratchpad da sessão): para cada elemento ele torna os glifos transparentes e esconde os filhos decorativos, fotografa a caixa e usa o **pior** pixel do fundo. Sem isso a amostra pega o próprio texto ou os tracejados e produz falso positivo — vale repetir esse cuidado se os valores de fundo forem mexidos de novo.
 

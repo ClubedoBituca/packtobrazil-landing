@@ -13,7 +13,7 @@ export const THEME_STORAGE_KEY = 'theme'
 
 /** Cor da barra do browser em cada tema (espelha `--surface` em globals.css). */
 export const browserBarColor: Record<Theme, string> = {
-  light: '#f1e9d9',
+  light: '#f2ebdc',
   dark: '#1b1e14',
 }
 

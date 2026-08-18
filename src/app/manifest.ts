@@ -12,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     categories: ['shopping', 'business'],
     // Combinam com `--surface` claro em globals.css.
-    background_color: '#f1e9d9',
-    theme_color: '#f1e9d9',
+    background_color: '#f2ebdc',
+    theme_color: '#f2ebdc',
     icons: [
       { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
       { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
