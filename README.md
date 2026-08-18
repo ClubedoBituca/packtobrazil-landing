@@ -42,7 +42,7 @@ src/config/site.ts        textos institucionais, links externos e vídeo
 src/content/              guia de importação (fonte do llms.txt e do JSON-LD)
 src/lib/                  contrato do tema, JSON-LD e arquivos llms.txt
 public/logo/              light.png e dark.png (arte oficial por tema)
-public/                   ícones, opengraph-image.jpg, planodefundo.png
+public/                   ícones, opengraph-image.jpg, planodefundo.webp
 identidade/               arte oficial recebida da marca (logos e PDF de origem)
 docs/referencias/         lp.png (referência desktop), mobilewireframe.png
 identidadevisual.md       paleta, frases e links de origem da marca
@@ -74,7 +74,26 @@ Sem JavaScript o botão some (`<noscript>`) e a página fica no claro.
 
 ### Arte de fundo
 
-O PNG original é lavado demais para aparecer sozinho — cru, a diferença entre o traço e o papel é de ~11 níveis de luminância. Em `.background-art` (globals.css) um par `brightness(0.7) contrast(2.75)` derruba a faixa até em volta do pivô do `contrast` e depois a reabre: os traços escurecem enquanto o fundo permanece na cor creme da marca. Escurecer sem esse par (só `brightness`) deixaria a página encardida, e só `contrast` empurraria tudo para o branco.
+`public/planodefundo.webp` — 3344×1882, 331 KB. O arquivo recebido da marca é lavado demais para aparecer sozinho: usa 87 dos 255 níveis de luminância. O par `brightness(0.7) contrast(2.75)` resolve isso — derruba a faixa até em volta do pivô do `contrast` e depois a reabre, escurecendo os traços enquanto o fundo permanece no creme da marca. Escurecer sem esse par (só `brightness`) deixaria a página encardida, e só `contrast` empurraria tudo para o branco.
+
+**Esse realce vem assado no arquivo, não em CSS.** Aplicado em CSS, a ordem das operações era: o navegador ampliava a imagem, a interpolação criava degraus, e o `contrast(2.75)` multiplicava esses degraus por 2,75 — era daí que vinha o serrilhado. Assado na origem em resolução nativa, a ampliação acontece depois e só suaviza. Sobra em `.background-art` apenas o ajuste de cor por tema (`saturate`, e `invert`/`hue-rotate` no escuro), que não amplifica artefato.
+
+O `sizes` do componente também não é `100vw`. Em tela vertical o `object-cover` escala pela **altura**, então `100vw` fazia o navegador pedir um candidato 3,8× menor que o necessário num celular. Com `(max-aspect-ratio: 1672/941) 178vh, 100vw` a largura pedida passa a ser a que cobre a altura. Medido: a ampliação no celular a 3× caiu de 3,75× para 1,35×, e num notebook Retina a imagem passou a ser **reduzida** (0,85×) em vez de ampliada.
+
+Para regerar a partir de um novo arquivo da marca:
+
+```python
+import numpy as np
+from PIL import Image
+src = Image.open('origem.png').convert('RGB')
+# matemática exata do filtro CSS: sRGB, pivô 0.5 (a do PIL pivota na média)
+a = np.clip(np.asarray(src)/255 * 0.7 * 2.75 + (0.5 - 2.75*0.5), 0, 1)
+base = Image.fromarray((a*255).round().astype(np.uint8))
+base.resize((src.width*2, src.height*2), Image.LANCZOS).save(
+    'public/planodefundo.webp', quality=90, method=6)
+```
+
+A ampliação é Lanczos 2× e vem **depois** do realce — nessa ordem a interpolação preenche os buracos que o `contrast` abre entre os níveis, em vez de amplificá-los.
 
 O véu por cima (`BackgroundArt.tsx`) segura o contraste do texto; o rodapé, que tem a menor tipografia da tela, ganha ainda uma faixa `bg-surface/80` própria.
 

@@ -146,19 +146,21 @@ body {
 }
 
 /* Arte de fundo.
-   O PNG original é lavado demais para aparecer sozinho (amplitude de ~11 níveis
-   de luminância). `brightness` derruba a faixa até em volta do pivô do
-   `contrast`, e o `contrast` então a reabre: os traços escurecem enquanto o
-   fundo continua na cor creme da marca — escurecer sem esse par só deixaria a
-   página encardida. No escuro o mesmo realce é aplicado antes de inverter. */
+   O arquivo original é lavado demais para aparecer sozinho — usa só 87 dos 255
+   níveis de luminância. O par `brightness(0.7) contrast(2.75)` que resolve isso
+   agora vem assado no `.webp` (ver README): aplicado aqui, ele multiplicava por
+   2,75 os degraus que a ampliação do navegador cria, e era isso que serrilhava
+   a arte. Assado, a ordem se inverte e a ampliação só suaviza.
+
+   Sobra o ajuste de cor, que é por tema e não amplifica artefato nenhum. */
 .background-art {
   opacity: 1;
-  filter: brightness(0.7) contrast(2.75) saturate(1.15);
+  filter: saturate(1.15);
 }
 
 [data-theme='dark'] .background-art {
   opacity: 0.4;
-  filter: brightness(0.7) contrast(2.75) invert(1) hue-rotate(180deg) saturate(0.8);
+  filter: invert(1) hue-rotate(180deg) saturate(0.8);
 }
 
 @media (prefers-reduced-motion: reduce) {
