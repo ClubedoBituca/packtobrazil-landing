@@ -43,7 +43,7 @@ src/content/              guia de importação (fonte do llms.txt e do JSON-LD)
 src/lib/                  contrato do tema, JSON-LD e arquivos llms.txt
 public/logo/              light.png e dark.png (arte oficial por tema)
 public/                   ícones, opengraph-image.jpg, planodefundo.webp
-identidade/               arte oficial recebida da marca (logos e PDF de origem)
+identidade/               arte oficial recebida da marca (logos, plano de fundo e PDF de origem)
 docs/referencias/         lp.png (referência desktop), mobilewireframe.png
 identidadevisual.md       paleta, frases e links de origem da marca
 ```
@@ -74,28 +74,24 @@ Sem JavaScript o botão some (`<noscript>`) e a página fica no claro.
 
 ### Arte de fundo
 
-`public/planodefundo.webp` — 3344×1882, 331 KB. O arquivo recebido da marca é lavado demais para aparecer sozinho: usa 87 dos 255 níveis de luminância. O par `brightness(0.7) contrast(2.75)` resolve isso — derruba a faixa até em volta do pivô do `contrast` e depois a reabre, escurecendo os traços enquanto o fundo permanece no creme da marca. Escurecer sem esse par (só `brightness`) deixaria a página encardida, e só `contrast` empurraria tudo para o branco.
+`public/planodefundo.webp` — 3344×1882, 322 KB, derivado de `identidade/planodefundo-origem.png` (1672×941).
 
-**Esse realce vem assado no arquivo, não em CSS.** Aplicado em CSS, a ordem das operações era: o navegador ampliava a imagem, a interpolação criava degraus, e o `contrast(2.75)` multiplicava esses degraus por 2,75 — era daí que vinha o serrilhado. Assado na origem em resolução nativa, a ampliação acontece depois e só suaviza. Sobra em `.background-art` apenas o ajuste de cor por tema (`saturate`, e `invert`/`hue-rotate` no escuro), que não amplifica artefato.
+A arte já vem da marca com a faixa tonal cheia (62–255, 192 níveis), então **não leva nenhum realce**: nem em CSS, nem assado no arquivo. Uma versão anterior era lavada (usava 87 dos 255 níveis) e precisava de um par `brightness(0.7) contrast(2.75)`; se um dia entrar outra arte assim, o realce vai no arquivo e não em CSS — aplicado em CSS ele multiplica por 2,75 os degraus que a ampliação do navegador cria, e é isso que serrilha. Em `.background-art` fica só o ajuste de cor por tema (`saturate`, e `invert`/`hue-rotate` no escuro), que não amplifica artefato.
 
-O `sizes` do componente também não é `100vw`. Em tela vertical o `object-cover` escala pela **altura**, então `100vw` fazia o navegador pedir um candidato 3,8× menor que o necessário num celular. Com `(max-aspect-ratio: 1672/941) 178vh, 100vw` a largura pedida passa a ser a que cobre a altura. Medido: a ampliação no celular a 3× caiu de 3,75× para 1,35×, e num notebook Retina a imagem passou a ser **reduzida** (0,85×) em vez de ampliada.
+O `sizes` do componente não é `100vw`. Em tela vertical o `object-cover` escala pela **altura**, então `100vw` fazia o navegador pedir um candidato 3,8× menor que o necessário num celular. Com `(max-aspect-ratio: 1672/941) 178vh, 100vw` a largura pedida passa a ser a que cobre a altura: no celular a 3× a ampliação cai de 3,75× para 1,35×, e num notebook Retina a imagem passa a ser reduzida (0,85×) em vez de ampliada.
 
 Para regerar a partir de um novo arquivo da marca:
 
 ```python
-import numpy as np
 from PIL import Image
-src = Image.open('origem.png').convert('RGB')
-# matemática exata do filtro CSS: sRGB, pivô 0.5 (a do PIL pivota na média)
-a = np.clip(np.asarray(src)/255 * 0.7 * 2.75 + (0.5 - 2.75*0.5), 0, 1)
-base = Image.fromarray((a*255).round().astype(np.uint8))
-base.resize((src.width*2, src.height*2), Image.LANCZOS).save(
+src = Image.open('identidade/planodefundo-origem.png').convert('RGB')
+src.resize((src.width*2, src.height*2), Image.LANCZOS).save(
     'public/planodefundo.webp', quality=90, method=6)
 ```
 
-A ampliação é Lanczos 2× e vem **depois** do realce — nessa ordem a interpolação preenche os buracos que o `contrast` abre entre os níveis, em vez de amplificá-los.
+A ampliação Lanczos 2× não inventa detalhe, mas evita que o navegador amplie 2,7× em tempo real com um filtro pior. Se a arte trocar de proporção, ajuste o `1672/941` no `sizes` de `BackgroundArt.tsx`.
 
-O véu por cima (`BackgroundArt.tsx`) segura o contraste do texto; o rodapé, que tem a menor tipografia da tela, ganha ainda uma faixa `bg-surface/80` própria.
+> Ao trocar a arte mantendo o mesmo nome de arquivo, apague `.next/dev/cache/images` — o otimizador do `next dev` guarda a saída por URL e continua servindo a imagem antiga. Em produção não acontece: cada build parte do zero.
 
 ### Contraste
 
