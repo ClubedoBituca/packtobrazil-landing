@@ -19,11 +19,11 @@ Tudo que muda com frequência está em [`src/config/site.ts`](src/config/site.ts
 | Campo | Situação |
 |---|---|
 | `video.url` | Preenchido. O player carrega apenas após o clique (fachada — nenhuma requisição a terceiros no load). Vazio → a seção cai no card estático. Aceita link do YouTube (`watch`, `youtu.be`, `shorts`, `embed`) ou, com `provider: 'mp4'`, uma URL de arquivo. |
-| `video.orientation` | `'vertical'` → moldura 9:16 com largura de celular; `'wide'` → 16:9 na largura do conteúdo. |
-| `externalLinks.appStoreIos` | Botão "App Store". Vazio → o botão some. |
-| `externalLinks.appStoreAndroid` | Botão "Google Play". Se só uma das duas lojas estiver preenchida, o slot vira um único botão "Baixar aplicativo". |
-| `externalLinks.liveGroup` | Botão "Grupo ao vivo" → grupo "Compras ao Vivo" no WhatsApp. |
-| `externalLinks.support` | Botão "Atendimento" → WhatsApp individual. |
+| `video.orientation` | `'vertical'` → moldura 9:16 dimensionada pela altura da tela (`.hero-video` em `globals.css`); `'wide'` → 16:9 na largura do conteúdo. |
+| `externalLinks.support` | Único botão de comando da página: "Fale com a gente" → WhatsApp individual. |
+| `externalLinks.appStoreIos` | Loja iOS. Não aparece na página: alimenta o `sameAs` e o `MobileApplication` do JSON-LD e o `/llms.txt`. |
+| `externalLinks.appStoreAndroid` | Idem, para Android. |
+| `externalLinks.liveGroup` | Grupo "Compras ao Vivo" no WhatsApp. Também só no JSON-LD e no `/llms.txt`. |
 | `externalLinks.instagram` | Perfil oficial: link do rodapé e `sameAs` do JSON-LD. Não é botão de comando. |
 | `NEXT_PUBLIC_SITE_URL` | Domínio de produção, usado em `metadataBase`, no Open Graph, no `robots.txt`, no `sitemap.xml` e no JSON-LD. Fallback: `https://packtobrazil.com`. **Também controla a indexação** — ver Deploy. |
 
@@ -37,7 +37,7 @@ src/app/sitemap.ts        sitemap.xml
 src/app/manifest.ts       manifest.webmanifest
 src/app/llms.txt/         resumo do site em texto puro, para agentes
 src/app/llms-full.txt/    guia de importação completo, para agentes
-src/components/           Hero, Logo, ThemeToggle, ShippingRoute, VideoSection, VideoPlayer, CTASection, Footer
+src/components/           Hero, VideoFrame, Separator, CTASection, Logo, ThemeToggle, ShippingRoute, VideoPlayer, Footer
 src/config/site.ts        textos institucionais, links externos e vídeo
 src/content/              guia de importação (fonte do llms.txt e do JSON-LD)
 src/lib/                  contrato do tema, JSON-LD e arquivos llms.txt
@@ -49,6 +49,10 @@ identidadevisual.md       paleta, frases e links de origem da marca
 ```
 
 Todos os componentes são Server Components, exceto dois `'use client'`: `VideoPlayer.tsx`, que só existe para carregar o player sob demanda, e `ThemeToggle.tsx`, que precisa de `localStorage` e de um handler de clique.
+
+A página é composta por duas telas e um separador: `Hero` (logo, headline e vídeo) ocupa uma tela de celular inteira, `Separator` reusa a rota tracejada do `ShippingRoute`, onde o pacote viaja de um pino ao outro e é entregue, para marcar a virada, e `CTASection` fecha com "Comece agora", o botão do WhatsApp e, abaixo dele, a descrição e os selos. Quem faz a primeira tela caber é `.hero-video` (`globals.css`): a largura do quadro 9:16 é calculada a partir da altura disponível, então em celular baixo o vídeo encolhe em vez de empurrar a headline para fora.
+
+O hero tem duas composições: no celular a logo fica sobre a headline e o selo EUA → Brasil não aparece — a altura que ele custava vale mais no vídeo; a partir de `lg` o selo abre a página centralizado no topo e logo e headline vão lado a lado, ocupando uma coluna larga contra a do vídeo.
 
 ## Tema claro e escuro
 

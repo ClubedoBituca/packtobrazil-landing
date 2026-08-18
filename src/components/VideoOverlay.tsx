@@ -23,11 +23,17 @@ export function VideoOverlay({
           rebaixa as legendas gravadas no quadro e sustenta o botão por cima. */}
       {poster ? (
         <>
+          {/* O quadro subiu para a primeira tela e virou a maior imagem acima
+              da dobra — é o candidato a LCP, então carrega cedo em vez de
+              esperar o lazy. O `sizes` acompanha a moldura estreita do 9:16:
+              pedir `100vw` baixava um candidato grande demais. */}
           <Image
             src={poster}
             alt=""
             fill
-            sizes="(min-width: 640px) 336px, 100vw"
+            loading="eager"
+            fetchPriority="high"
+            sizes="(min-width: 640px) 320px, 75vw"
             className="object-cover"
           />
           <span aria-hidden className="absolute inset-0 bg-black/55" />

@@ -54,7 +54,6 @@
   --color-cta-app-ink: var(--cta-app-ink);
 
   --shadow-card: var(--shadow-card-value);
-  --shadow-cta: var(--shadow-cta-value);
 }
 
 /* Tema claro — é o padrão, inclusive na primeira visita.
@@ -89,7 +88,10 @@
   --screen-glow: #475905;
 
   --shadow-card-value: 0 24px 60px -30px rgb(52 64 28 / 0.45);
-  --shadow-cta-value: 0 16px 32px -18px rgb(52 64 28 / 0.85);
+
+  /* Laranja das sombras do CTA: o kraft da arte de fundo. Vai como tripla RGB
+     porque as sombras precisam variar a opacidade ao longo do laço. */
+  --cta-glow: 168 92 34;
 }
 
 /* Tema escuro.
@@ -118,7 +120,10 @@
   --screen-glow: #1f2416;
 
   --shadow-card-value: 0 24px 60px -30px rgb(0 0 0 / 0.8);
-  --shadow-cta-value: 0 16px 34px -20px rgb(0 0 0 / 0.9);
+
+  /* No escuro o kraft some no fundo quase preto: sobe para o laranja claro do
+     acento, que é o mesmo tom lido como destaque no resto do tema. */
+  --cta-glow: 224 149 76;
 }
 
 html {
@@ -143,6 +148,198 @@ body {
 .video-screen {
   background-color: var(--screen);
   background-image: radial-gradient(circle at 50% 45%, var(--screen-glow) 0%, var(--screen) 65%);
+}
+
+/* Vídeo 9:16 dentro de uma tela só.
+   Esticado pela largura do container, um 9:16 passa de 500px de altura e sozinho
+   já estoura a primeira tela do celular. Aqui a largura sai da ALTURA disponível:
+   os 18rem descontados são o resto da tela 1 (faixa do topo, paddings, logo,
+   headline de três linhas e os intervalos). Assim o quadro encolhe em
+   celular baixo em vez de empurrar a headline para fora, e nunca passa dos 20rem
+   que o player já tinha. `svh` porque as barras do navegador mobile mexem em `vh`. */
+@layer components {
+  .hero-video {
+    width: clamp(9rem, calc((100svh - 18rem) * 9 / 16), 20rem);
+  }
+
+  /* No desktop o hero é de duas colunas: a coluna do vídeo divide a altura com
+     os paddings da seção e com o selo EUA → Brasil, e não com a marca — sobra
+     folga, e o teto sobe para 22rem para o player não encolher na tela grande. */
+  @media (min-width: 1024px) {
+    .hero-video {
+      width: min(22rem, calc((100svh - 13rem) * 9 / 16));
+    }
+  }
+}
+
+/* Entrada dos elementos da primeira tela. Só `opacity` e `transform`, então nada
+   reflui; `both` segura o estado inicial durante o atraso. O bloco de
+   `prefers-reduced-motion` no fim do arquivo zera a duração e o conteúdo aparece
+   direto no estado final. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Na camada `components` para que o utilitário `[animation-delay:…]` do Tailwind,
+   que vem depois na cascata, consiga escalonar a entrada. */
+@layer components {
+  .rise {
+    animation: rise 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+}
+
+/* Halo do CTA: um anel laranja que nasce na borda do botão e se abre até sumir,
+   junto de um brilho que se espalha para baixo. O raio ganha desfoque enquanto
+   cresce — sem isso ele lia como uma borda laranja, e não como sombra.
+
+   Só `box-shadow` num pseudo-elemento: não desloca nada e não pinta por cima do
+   conteúdo. É a única animação em laço da página, e existe porque o botão é o
+   destino de tudo — daí o intervalo longo e a opacidade baixa, para chamar sem
+   piscar. Para no hover/foco, onde o próprio botão já dá retorno, e o bloco de
+   `prefers-reduced-motion` no fim do arquivo a desliga por completo. */
+@keyframes cta-halo {
+  0% {
+    box-shadow:
+      0 0 0 0 rgb(var(--cta-glow) / 0.5),
+      0 12px 26px -14px rgb(var(--cta-glow) / 0.6);
+  }
+  70% {
+    box-shadow:
+      0 0 30px 16px rgb(var(--cta-glow) / 0),
+      0 26px 48px -18px rgb(var(--cta-glow) / 0.15);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgb(var(--cta-glow) / 0),
+      0 12px 26px -14px rgb(var(--cta-glow) / 0.6);
+  }
+}
+
+@layer components {
+  /* A profundidade vem de três camadas: um contato curto e escuro que assenta o
+     botão na página, e duas quentes e longas que o descolam do creme. Fica aqui,
+     e não num token de sombra do tema, porque ela tem de crescer no hover junto
+     com o deslocamento. */
+  .cta-pulse {
+    position: relative;
+    box-shadow:
+      0 2px 4px -2px rgb(27 30 20 / 0.45),
+      0 14px 28px -14px rgb(var(--cta-glow) / 0.55),
+      0 30px 60px -28px rgb(var(--cta-glow) / 0.5);
+  }
+
+  .cta-pulse:hover,
+  .cta-pulse:focus-visible {
+    box-shadow:
+      0 4px 8px -3px rgb(27 30 20 / 0.5),
+      0 22px 40px -16px rgb(var(--cta-glow) / 0.65),
+      0 44px 80px -34px rgb(var(--cta-glow) / 0.6);
+  }
+
+  .cta-pulse::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: cta-halo 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .cta-pulse:hover::after,
+  .cta-pulse:focus-visible::after {
+    animation: none;
+  }
+}
+
+/* Trajeto do separador: um único laço de 7s que os três elementos compartilham,
+   cada um agindo na sua janela — o pacote cruza a rota, é entregue na chegada e o
+   pino de destino responde. Só `transform` e `opacity`.
+
+   A distância é `100cqw - 100%`: a largura da pista (que é o container de
+   consulta) menos a largura do próprio grupo, ou seja, exatamente da origem até
+   o destino, em qualquer tela. O `translate` separado é o que centraliza na
+   vertical sem disputar o `transform` da animação. */
+@keyframes route-fly {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  72%,
+  86% {
+    transform: translateX(calc(100cqw - 100%));
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: translateX(calc(100cqw - 100%));
+    opacity: 0;
+  }
+}
+
+/* O pacote é entregue: desce e some assim que chega ao destino. */
+@keyframes route-drop {
+  0%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  80%,
+  100% {
+    opacity: 0;
+    transform: translateY(7px) scale(0.85);
+  }
+}
+
+/* E o destino acusa o recebimento. */
+@keyframes route-land {
+  0%,
+  76% {
+    transform: none;
+  }
+  82% {
+    transform: translateY(-3px) scale(1.15);
+  }
+  90%,
+  100% {
+    transform: none;
+  }
+}
+
+@layer components {
+  .route-track {
+    container-type: inline-size;
+  }
+
+  .route-flyer {
+    translate: 0 -50%;
+    animation: route-fly 7s linear infinite;
+  }
+
+  /* A sombra curta é o que põe a caixa à frente da linha, e não apenas por cima
+     dela. `drop-shadow` acompanha o contorno do SVG — `box-shadow` desenharia um
+     retângulo em volta do ícone inteiro. */
+  .route-parcel {
+    filter: drop-shadow(0 1.5px 1px rgb(52 64 28 / 0.28));
+    animation: route-drop 7s ease-in infinite;
+  }
+
+  [data-theme='dark'] .route-parcel {
+    filter: drop-shadow(0 1.5px 2px rgb(0 0 0 / 0.55));
+  }
+
+  .route-target {
+    animation: route-land 7s ease-out infinite;
+  }
 }
 
 /* Arte de fundo.
@@ -174,5 +371,19 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* Zerar a duração não serve para o trajeto: o último quadro é o pacote já
+     entregue e invisível no destino. Sem animação, a rota volta a ser o desenho
+     parado de sempre — a caixa no meio do caminho. */
+  .route-flyer {
+    animation: none !important;
+    opacity: 1;
+    transform: translateX(calc((100cqw - 100%) / 2));
+  }
+
+  .route-parcel,
+  .route-target {
+    animation: none !important;
   }
 }

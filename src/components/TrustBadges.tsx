@@ -2,14 +2,15 @@ import { CheckIcon } from './icons'
 
 /**
  * Reforços curtos de confiança. Cada um precisa acrescentar informação: nenhum
- * repete o fecho "Facilidade e conforto" do parágrafo do hero.
+ * repete o fecho "Facilidade e conforto" do parágrafo acima.
  *
- * Levam `text-ink`, e não o `text-ink-muted` dos textos de apoio: esta linha é a
- * única que cai por cima da rota tracejada da arte de fundo, e em `ink-muted`
- * media 3,4:1 contra o pior pixel atrás das letras. O véu reforçado sozinho não
- * resolvia, e a tinta escura sozinha também não — só as duas juntas.
+ * Levam `text-ink`, e não o `text-ink-muted` dos textos de apoio: são letras
+ * miúdas por cima da arte de fundo, que é `fixed` e pode parar em qualquer
+ * altura da rolagem. Em `ink-muted` mediam 3,4:1 contra o pior pixel atrás das
+ * letras; o véu reforçado sozinho não resolvia, e a tinta escura sozinha também
+ * não — só as duas juntas.
  */
-const badges = ['Direto na sua porta', 'Sem sair de casa', 'Entrega segura']
+const badges = ['Direto na sua porta', 'Sem sair de casa', 'Rastreio pelo app']
 
 export function TrustBadges({ className = '' }: { className?: string }) {
   return (

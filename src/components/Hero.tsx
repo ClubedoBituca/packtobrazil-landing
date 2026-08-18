@@ -1,54 +1,52 @@
 import { Logo } from './Logo'
 import { RouteFlags } from './RouteFlags'
-import { ShippingRoute } from './ShippingRoute'
-import { TrustBadges } from './TrustBadges'
-import { site, socialProof } from '@/config/site'
+import { VideoFrame } from './VideoFrame'
+import { site } from '@/config/site'
 
-/** Logo + headline andam juntos e ficam levemente à direita; a pílula das bandeiras
- *  atravessa as duas colunas e por isso fica centralizada na página.
+/**
+ * Primeira tela: marca, promessa e vídeo — nada mais. É o bloco que precisa
+ * caber inteiro no celular, então cada elemento aqui disputa altura com o vídeo.
  *
- *  Só a partir de `lg`: entre 640px e 1023px as duas colunas já ocupam a largura
- *  inteira do container, e como `translate` não entra no fluxo o deslocamento
- *  empurrava a headline para fora — sobrava 8px de margem à direita contra 32px
- *  à esquerda. Daí para cima existe folga e o deslocamento cabe. */
-const brandShift = 'lg:translate-x-5'
-
+ * `min-h-[100svh]`: `svh` porque as barras do navegador mobile encolhem `vh` no
+ * meio da rolagem, e `min-h` (não `h`) para que uma tela muito baixa cresça em
+ * vez de cortar. Quem se ajusta à altura é o vídeo — ver `.hero-video` em
+ * globals.css.
+ *
+ * As duas composições são bem diferentes de propósito:
+ *
+ * - celular: logo sobre a headline, vídeo embaixo, tudo centralizado. O selo
+ *   EUA → Brasil não entra — a altura que ele custava vale mais no vídeo.
+ * - desktop: o selo abre a página no topo, centralizado; abaixo, logo e headline
+ *   lado a lado ocupando a largura toda de um lado e o vídeo do outro. Empilhar
+ *   como no celular deixava metade da tela vazia.
+ */
 export function Hero() {
   return (
-    <section className="px-5 pt-10 pb-10 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16">
-      <div className="mx-auto flex max-w-5xl flex-col items-center">
-        <div className="grid w-full grid-cols-1 justify-items-center gap-y-5 sm:grid-cols-[auto_auto] sm:justify-center sm:gap-x-8 sm:gap-y-4 lg:gap-x-10">
-          <Logo
-            alt={site.name}
-            preload
-            sizes="(min-width: 1024px) 128px, (min-width: 640px) 112px, 80px"
-            className={`size-20 shrink-0 sm:col-start-1 sm:row-start-2 sm:size-28 lg:size-32 ${brandShift}`}
-          />
-
-          <RouteFlags className="sm:col-span-2 sm:row-start-1" />
-
-          <h1
-            className={`max-w-[20ch] text-center font-display text-[clamp(1.75rem,6.5vw,2.75rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-ink text-balance sm:col-start-2 sm:row-start-2 sm:max-w-[24ch] sm:text-left ${brandShift}`}
-          >
-            Dos EUA diretamente para o seu endereço,{' '}
-            <span className="text-accent">sem sair de casa!</span>
-          </h1>
+    <section className="flex min-h-[calc(100svh-0.25rem)] flex-col items-center justify-center px-5 py-8 sm:py-12 lg:py-14">
+      <div className="mx-auto w-full max-w-5xl lg:max-w-7xl">
+        {/* `RouteFlags` é `inline-flex`, então `mx-auto` não o centraliza —
+            quem centraliza é este `flex justify-center`. */}
+        <div className="hidden justify-center lg:flex">
+          <RouteFlags />
         </div>
 
-        <p className="mt-6 max-w-[34ch] text-center text-[0.9375rem] leading-relaxed text-ink-muted text-pretty sm:mt-7 sm:max-w-xl sm:text-base">
-          A {site.name} facilita suas compras nos EUA e envia direto para sua casa.
-          Facilidade e conforto em suas mãos.
-        </p>
+        <div className="grid w-full items-center justify-items-center gap-6 sm:gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:justify-items-start lg:gap-x-12 xl:gap-x-16">
+          <div className="flex flex-col items-center gap-4 sm:gap-5 lg:w-full lg:flex-row lg:items-center lg:gap-8 xl:gap-10">
+            <Logo
+              alt={site.name}
+              preload
+              sizes="(min-width: 1280px) 192px, (min-width: 1024px) 144px, (min-width: 640px) 80px, 64px"
+              className="size-16 shrink-0 sm:size-20 lg:size-36 xl:size-48"
+            />
 
-        {socialProof ? (
-          <p className="mt-5 rounded-full bg-accent/12 px-4 py-2 text-center text-xs font-semibold text-accent ring-1 ring-accent/25 sm:text-[0.8125rem]">
-            {socialProof}
-          </p>
-        ) : null}
+            <h1 className="rise max-w-[18ch] text-center font-display text-[clamp(1.6rem,5.8vw,2.75rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-ink text-balance sm:max-w-[20ch] lg:max-w-[15ch] lg:text-left lg:text-[clamp(2.75rem,4.2vw,4.25rem)]">
+              Dos EUA diretamente para o seu endereço,{' '}
+              <span className="text-accent">sem sair de casa!</span>
+            </h1>
+          </div>
 
-        <TrustBadges className="mt-6 sm:mt-7" />
-
-        <ShippingRoute className="mt-9 sm:mt-11" />
+          <VideoFrame className="rise [animation-delay:120ms]" />
+        </div>
       </div>
     </section>
   )

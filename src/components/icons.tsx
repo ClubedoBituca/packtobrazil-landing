@@ -12,22 +12,6 @@ const base = {
   xmlns: 'http://www.w3.org/2000/svg',
 }
 
-export function AppleIcon({ className, ...props }: IconProps) {
-  return (
-    <svg {...base} viewBox="0 0 24 24" fill="currentColor" className={className} {...props}>
-      <path d="M16.36 12.79c.02 2.5 2.19 3.33 2.22 3.34-.02.05-.35 1.19-1.15 2.35-.69 1-1.41 2-2.54 2.02-1.11.02-1.47-.66-2.74-.66-1.27 0-1.66.64-2.72.68-1.09.04-1.92-1.08-2.62-2.08-1.43-2.06-2.52-5.83-1.05-8.37.73-1.27 2.03-2.07 3.44-2.09 1.07-.02 2.08.72 2.74.72.65 0 1.88-.89 3.17-.76.54.02 2.06.2 3.03 1.63-.08.05-1.78 1.04-1.78 3.22ZM14.5 5.2c.58-.7.97-1.68.86-2.65-.85.03-1.88.57-2.48 1.27-.54.62-1 1.61-.88 2.56.95.07 1.92-.48 2.5-1.18Z" />
-    </svg>
-  )
-}
-
-export function GooglePlayIcon({ className, ...props }: IconProps) {
-  return (
-    <svg {...base} viewBox="0 0 24 24" fill="currentColor" className={className} {...props}>
-      <path d="M3.6 2.3c-.2.24-.32.6-.32 1.06v17.28c0 .46.12.82.33 1.06l9.1-9.7L3.6 2.3Zm10.2 8.03 2.9-3.1L6.1 1.4c-.4-.23-.78-.28-1.07-.16l8.77 9.09Zm0 3.34-8.78 9.1c.3.11.68.06 1.08-.17l10.6-5.83-2.9-3.1Zm4.1-1.67 2.5-1.38c.62-.34.94-.79.94-1.28 0-.5-.32-.94-.94-1.28l-2.5-1.38-3.13 3.34 3.13 3.34Z" />
-    </svg>
-  )
-}
-
 export function WhatsAppIcon({ className, ...props }: IconProps) {
   return (
     <svg {...base} viewBox="0 0 24 24" fill="currentColor" className={className} {...props}>
@@ -168,23 +152,3 @@ export function SunIcon({ className, ...props }: IconProps) {
   )
 }
 
-/** Grupo de pessoas — usado no CTA do grupo de ofertas ao vivo. */
-export function UsersIcon({ className, ...props }: IconProps) {
-  return (
-    <svg
-      {...base}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.7}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      {...props}
-    >
-      <circle cx="9" cy="8" r="3.4" />
-      <path d="M2.8 19.4a6.4 6.4 0 0 1 12.4 0" />
-      <path d="M16.2 5.1a3.4 3.4 0 0 1 0 6.6M17.6 14.4a6.4 6.4 0 0 1 3.6 5" />
-    </svg>
-  )
-}

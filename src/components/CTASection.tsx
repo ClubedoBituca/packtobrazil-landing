@@ -1,86 +1,50 @@
-import { externalLinks } from '@/config/site'
-import { CtaCard, type CtaCardProps } from './CtaCard'
-import { AppleIcon, GooglePlayIcon, UsersIcon, WhatsAppIcon } from './icons'
-
-type Cta = Omit<CtaCardProps, 'className'>
-
-const stores = [
-  {
-    href: externalLinks.appStoreIos,
-    label: 'App Store',
-    hint: 'Baixe no iPhone e iPad',
-    icon: AppleIcon,
-  },
-  {
-    href: externalLinks.appStoreAndroid,
-    label: 'Google Play',
-    hint: 'Baixe no Android',
-    icon: GooglePlayIcon,
-  },
-].filter((store) => store.href.length > 0)
+import { externalLinks, site } from '@/config/site'
+import { TrustBadges } from './TrustBadges'
+import { ArrowRightIcon, WhatsAppIcon } from './icons'
 
 /**
- * Com uma única loja configurada, o CTA principal é um só bloco
- * ("Baixar aplicativo"). Ao preencher a segunda loja em `config/site.ts`,
- * o mesmo slot passa a exibir os dois blocos automaticamente.
+ * Segunda tela: um bloco só, com a ação na frente. O convite e o botão vêm
+ * primeiro — quem rolou até aqui já viu o vídeo e não precisa de mais um texto
+ * antes de poder agir; a descrição e os selos ficam logo abaixo, para quem ainda
+ * quer confirmar. Nada aqui compete com o CTA: ele é o único link de ação da
+ * página.
  */
-const appCtas =
-  stores.length === 1
-    ? [{ ...stores[0], label: 'Baixar aplicativo', hint: 'Comece em poucos toques' }]
-    : stores
-
-/**
- * Os quatro botões de comando, na ordem em que a pessoa costuma precisar deles:
- * primeiro baixar o app, depois os dois canais de WhatsApp.
- *
- * Os dois canais dividem o verde do WhatsApp porque são o mesmo aplicativo; o
- * que os separa é o ícone (grupo x conversa) e o texto de apoio.
- */
-const allCtas: Cta[] = [
-  ...appCtas.map((cta) => ({ ...cta, variant: 'app' as const })),
-  {
-    href: externalLinks.liveGroup,
-    label: 'Grupo ao vivo',
-    hint: 'Ofertas em tempo real no WhatsApp',
-    icon: UsersIcon,
-    variant: 'whats',
-  },
-  {
-    href: externalLinks.support,
-    label: 'Atendimento',
-    hint: 'Fale com a gente no WhatsApp',
-    icon: WhatsAppIcon,
-    variant: 'whats',
-  },
-]
-
-const ctas = allCtas.filter((cta) => cta.href.length > 0)
-
 export function CTASection() {
   return (
-    <section aria-labelledby="cta-heading" className="px-5 pt-12 pb-14 sm:pt-16 sm:pb-20">
-      <div className="mx-auto max-w-4xl">
-        <div className="flex items-center gap-4">
-          <span aria-hidden className="h-px flex-1 bg-hairline/15" />
-          <span className="text-[0.625rem] font-semibold uppercase tracking-[0.28em] text-ink-subtle">
-            Próximo passo
-          </span>
-          <span aria-hidden className="h-px flex-1 bg-hairline/15" />
-        </div>
+    <section
+      aria-labelledby="cta-heading"
+      className="flex min-h-[65svh] flex-col items-center justify-center px-5 pb-16 sm:pb-20"
+    >
+      <h2
+        id="cta-heading"
+        className="text-center font-display text-[1.75rem] font-extrabold tracking-[-0.02em] text-ink sm:text-[2.25rem]"
+      >
+        Comece agora
+      </h2>
 
-        <h2
-          id="cta-heading"
-          className="mt-6 text-center font-display text-2xl font-extrabold tracking-[-0.01em] text-ink sm:text-[2rem]"
-        >
-          Comece agora
-        </h2>
+      {/* Único CTA da página. O verde é o do WhatsApp (identidade da plataforma,
+          não da marca), e o alvo passa de 60px de altura em qualquer tela.
+          `cta-pulse` põe um halo lento em volta — é o que puxa o olho para cá
+          quando a segunda tela entra; some no hover, onde o próprio botão já
+          responde, e no `prefers-reduced-motion`. */}
+      <a
+        href={externalLinks.support}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Fale com a gente no WhatsApp"
+        className="cta-pulse group mt-7 flex min-h-[3.75rem] w-full max-w-[24rem] items-center justify-center gap-3 rounded-2xl bg-whats px-6 text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:translate-y-0 active:scale-[0.98] sm:mt-8 sm:min-h-[4rem]"
+      >
+        <WhatsAppIcon className="size-6 shrink-0" />
+        <span className="font-display text-base font-bold sm:text-lg">Fale com a gente</span>
+        <ArrowRightIcon className="size-[18px] shrink-0 opacity-80 transition-transform duration-200 group-hover:translate-x-0.5" />
+      </a>
 
-        <div className="mt-7 grid gap-3 sm:mt-9 sm:grid-cols-2 sm:gap-4">
-          {ctas.map((cta) => (
-            <CtaCard key={cta.href} {...cta} />
-          ))}
-        </div>
-      </div>
+      <p className="mt-11 max-w-[32ch] text-center text-[0.9375rem] leading-relaxed text-ink-muted text-pretty sm:mt-14 sm:max-w-[46ch] sm:text-lg">
+        A {site.name} facilita suas compras nos EUA e envia direto para sua casa. Facilidade e
+        conforto em suas mãos.
+      </p>
+
+      <TrustBadges className="mt-6 sm:mt-7" />
     </section>
   )
 }

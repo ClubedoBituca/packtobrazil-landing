@@ -2,8 +2,8 @@ import { BackgroundArt } from '@/components/BackgroundArt'
 import { CTASection } from '@/components/CTASection'
 import { Footer } from '@/components/Footer'
 import { Hero } from '@/components/Hero'
+import { Separator } from '@/components/Separator'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { VideoSection } from '@/components/VideoSection'
 import { buildStructuredData, serializeStructuredData } from '@/lib/structured-data'
 
 export default function LandingPage() {
@@ -27,7 +27,7 @@ export default function LandingPage() {
         />
         <main className="flex-1">
           <Hero />
-          <VideoSection />
+          <Separator />
           <CTASection />
         </main>
         <Footer />
