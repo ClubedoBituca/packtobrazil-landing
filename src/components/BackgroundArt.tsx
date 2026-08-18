@@ -34,8 +34,14 @@ export function BackgroundArt() {
         sizes="(max-aspect-ratio: 1672/941) 178vh, 100vw"
         className="background-art object-cover object-center"
       />
-      {/* Véu na cor da página: garante o contraste do texto sobre a arte */}
-      <div className="absolute inset-0 bg-gradient-to-b from-surface/60 via-surface/30 to-surface/70" />
+      {/* Véu na cor da página: garante o contraste do texto sobre a arte.
+          O véu era mais fraco no meio (30%) que nas pontas, e como ele é `fixed`
+          esse ponto fraco cai sempre no meio da viewport — justamente onde se
+          lê. Com a arte atual isso derrubava os selos de confiança para 3,0:1,
+          abaixo de AA, medido só nos pixels atrás das letras. Nivelado em 62%,
+          eles sobem para 5,0:1; o parágrafo e a headline não se mexem, porque
+          já caem sobre papel limpo. */}
+      <div className="absolute inset-0 bg-gradient-to-b from-surface/62 via-surface/62 to-surface/72" />
     </div>
   )
 }
