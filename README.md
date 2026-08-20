@@ -18,9 +18,9 @@ Tudo que muda com frequência está em [`src/config/site.ts`](src/config/site.ts
 
 | Campo | Situação |
 |---|---|
-| `video.url` | Preenchido. O player carrega apenas após o clique (fachada — nenhuma requisição a terceiros no load). Vazio → a seção cai no card estático. Aceita link do YouTube (`watch`, `youtu.be`, `shorts`, `embed`) ou, com `provider: 'mp4'`, uma URL de arquivo. |
+| `video.url` | `/como-funciona.mp4`, servido pelo próprio domínio — a página não pede nada a terceiros em momento nenhum. O vídeo começa sozinho e mudo; o clique devolve o som. Vazio → a seção cai no card estático. Ver "Trocando o vídeo". |
 | `video.orientation` | `'vertical'` → moldura 9:16 dimensionada pela altura da tela (`.hero-video` em `globals.css`); `'wide'` → 16:9 na largura do conteúdo. |
-| `externalLinks.liveGroup` | Único botão de comando da página: "Entre no Grupo" → convite do grupo no WhatsApp. |
+| `externalLinks.liveGroup` | Único botão de comando da página: "Participe da nossa comunidade" → convite do grupo no WhatsApp. |
 | `externalLinks.appStoreIos` | Loja iOS. Não aparece na página: alimenta o `sameAs` e o `MobileApplication` do JSON-LD e o `/llms.txt`. |
 | `externalLinks.appStoreAndroid` | Idem, para Android. |
 | `externalLinks.support` | Atendimento individual no WhatsApp. Não aparece na página: só no JSON-LD e no `/llms.txt`. |
@@ -48,11 +48,35 @@ docs/referencias/         lp.png (referência desktop), mobilewireframe.png
 identidadevisual.md       paleta, frases e links de origem da marca
 ```
 
-Todos os componentes são Server Components, exceto dois `'use client'`: `VideoPlayer.tsx`, que só existe para carregar o player sob demanda, e `ThemeToggle.tsx`, que precisa de `localStorage` e de um handler de clique.
+Todos os componentes são Server Components, exceto dois `'use client'`: `VideoPlayer.tsx`, que controla o autoplay mudo e a passagem para o som, e `ThemeToggle.tsx`, que precisa de `localStorage` e de um handler de clique.
 
 A página é composta por duas telas e um separador: `Hero` (logo, headline e vídeo) ocupa uma tela de celular inteira, `Separator` reusa a rota tracejada do `ShippingRoute`, onde o pacote viaja de um pino ao outro e é entregue, para marcar a virada, e `CTASection` fecha com "Comece agora", o botão do WhatsApp e, abaixo dele, a descrição e os selos. Quem faz a primeira tela caber é `.hero-video` (`globals.css`): a largura do quadro 9:16 é calculada a partir da altura disponível, então em celular baixo o vídeo encolhe em vez de empurrar a headline para fora.
 
-O hero tem duas composições: no celular a logo fica sobre a headline e o selo EUA → Brasil não aparece — a altura que ele custava vale mais no vídeo; a partir de `lg` o selo abre a página centralizado no topo e logo e headline vão lado a lado, ocupando uma coluna larga contra a do vídeo.
+Logo e headline andam lado a lado em qualquer largura: empilhados no celular, os dois custavam a altura do logo mais o intervalo, e essa altura vale mais no vídeo. O que muda por breakpoint é o resto — no celular o selo EUA → Brasil não aparece, e a partir de `lg` ele abre a página centralizado no topo enquanto a linha do logo com a headline ocupa uma coluna larga contra a do vídeo.
+
+## Trocando o vídeo
+
+O arquivo vive em `public/como-funciona.mp4` e é servido pela Vercel, junto do resto dos assets estáticos. Não há YouTube nem player de terceiros: nenhuma requisição sai do domínio, antes ou depois de o vídeo tocar.
+
+Ele **começa sozinho e mudo** quando a página abre — o único autoplay que os navegadores liberam sem gesto do usuário. Um selo "Ativar som" cobre o quadro inteiro; o clique tira o mudo, volta ao começo e entrega os controles nativos. Com `prefers-reduced-motion: reduce` o autoplay não acontece: o quadro fica no poster, parado, já com os controles à mostra.
+
+Para trocar, exporte em 9:16 (o `<video>` usa `object-cover` e corta o que sobrar) e comprima antes de commitar:
+
+```bash
+ffmpeg -i original.MOV -vf "scale=720:1280:flags=lanczos" \
+  -c:v libx264 -profile:v high -pix_fmt yuv420p -preset slow -crf 32 \
+  -movflags +faststart -c:a aac -b:a 64k -ac 1 public/como-funciona.mp4
+```
+
+Os números não são arbitrários. **720x1280** porque a moldura exibe no máximo 22rem (~352px), o que dá 704px numa tela 2x — acima disso é peso que ninguém vê. **CRF 32** foi comparado quadro a quadro contra 27 e 30 no tamanho de exibição, sem diferença visível, e é o que leva os 64 MB do original para 8,6 MB. **`+faststart`** põe o índice no começo do arquivo, senão o autoplay espera o download inteiro. **Áudio mono em 64k** porque é voz, e economiza 1,3 MB em 2min41.
+
+Como o vídeo autoplaya, cada visitante baixa o arquivo inteiro — é o custo de banda da página. Vale acompanhar o uso do projeto na Vercel se a landing entrar em campanha paga.
+
+Trocando o arquivo, regere também o poster (`public/video-poster.jpg`), que é o que aparece antes do primeiro quadro e no modo reduced-motion:
+
+```bash
+ffmpeg -i public/como-funciona.mp4 -ss 3 -frames:v 1 -q:v 3 public/video-poster.jpg
+```
 
 ## Tema claro e escuro
 

@@ -5,7 +5,7 @@ import { VideoPlayer } from './VideoPlayer'
 /**
  * Moldura do vídeo dentro da primeira tela — sem título e sem legenda: o quadro
  * fala por si, e qualquer linha extra aqui empurraria o conjunto para fora da
- * tela. A descrição para leitor de tela está no `aria-label` do botão de play.
+ * tela. A descrição para leitor de tela está no `aria-label` do selo de som.
  *
  * A largura vem de `.hero-video` (globals.css), calculada a partir da ALTURA
  * disponível: um 9:16 esticado pela largura do container não caberia em uma tela
@@ -25,7 +25,7 @@ export function VideoFrame({ className = '' }: { className?: string }) {
         className={`video-screen relative w-full overflow-hidden rounded-[18px] sm:rounded-[26px] ${frameAspect}`}
       >
         {video.url ? (
-          <VideoPlayer url={video.url} provider={video.provider} poster={video.poster} />
+          <VideoPlayer url={video.url} poster={video.poster} />
         ) : (
           <VideoOverlay />
         )}

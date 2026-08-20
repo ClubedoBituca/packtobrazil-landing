@@ -113,6 +113,26 @@ export function PlayIcon({ className, ...props }: IconProps) {
   )
 }
 
+/** Alto-falante cortado: o vídeo está tocando mudo e o clique devolve o som. */
+export function SoundOffIcon({ className, ...props }: IconProps) {
+  return (
+    <svg
+      {...base}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <path d="M11 5 6.5 8.75H3.5v6.5h3L11 19Z" fill="currentColor" />
+      <path d="m16 9.5 4.5 5M20.5 9.5 16 14.5" />
+    </svg>
+  )
+}
+
 /** Ícone do botão de tema quando a página está clara (leva para o escuro). */
 export function MoonIcon({ className, ...props }: IconProps) {
   return (

@@ -63,19 +63,18 @@ export const socialProof: string = ''
 
 /**
  * Vídeo "Como funciona".
- * Enquanto `url` estiver vazia, a seção renderiza o card estático (sem JS de cliente).
- * Basta preencher `url` (e ajustar `provider`) para ativar o player.
+ * Enquanto `url` estiver vazia, a seção renderiza o card estático (sem JS de
+ * cliente). O arquivo é servido pelo próprio domínio: a página não pede nada a
+ * terceiros em momento nenhum, nem antes nem depois de o vídeo tocar.
  */
 export const video: {
   url: string
-  provider: 'youtube' | 'mp4'
   /** Proporção da moldura: 'vertical' = 9:16 (Shorts), 'wide' = 16:9. */
   orientation: 'vertical' | 'wide'
   poster: string
 } = {
-  /** Vídeo não listado no YouTube — embutível, mas não aparece em buscas. */
-  url: 'https://youtube.com/shorts/qVHonSlTTNQ',
-  provider: 'youtube',
+  /** Arquivo em `public/` — 720x1280, ver README para o comando de compressão. */
+  url: '/como-funciona.mp4',
   orientation: 'vertical',
   /** Quadro do vídeo servido localmente — ver README. */
   poster: '/video-poster.jpg',
