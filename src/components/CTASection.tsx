@@ -28,14 +28,14 @@ export function CTASection() {
           quando a segunda tela entra; some no hover, onde o próprio botão já
           responde, e no `prefers-reduced-motion`. */}
       <a
-        href={externalLinks.support}
+        href={externalLinks.liveGroup}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Fale com a gente no WhatsApp"
+        aria-label="Entre no grupo do WhatsApp"
         className="cta-pulse group mt-7 flex min-h-[3.75rem] w-full max-w-[24rem] items-center justify-center gap-3 rounded-2xl bg-whats px-6 text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:translate-y-0 active:scale-[0.98] sm:mt-8 sm:min-h-[4rem]"
       >
         <WhatsAppIcon className="size-6 shrink-0" />
-        <span className="font-display text-base font-bold sm:text-lg">Fale com a gente</span>
+        <span className="font-display text-base font-bold sm:text-lg">Entre no Grupo</span>
         <ArrowRightIcon className="size-[18px] shrink-0 opacity-80 transition-transform duration-200 group-hover:translate-x-0.5" />
       </a>
 

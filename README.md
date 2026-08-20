@@ -20,10 +20,10 @@ Tudo que muda com frequência está em [`src/config/site.ts`](src/config/site.ts
 |---|---|
 | `video.url` | Preenchido. O player carrega apenas após o clique (fachada — nenhuma requisição a terceiros no load). Vazio → a seção cai no card estático. Aceita link do YouTube (`watch`, `youtu.be`, `shorts`, `embed`) ou, com `provider: 'mp4'`, uma URL de arquivo. |
 | `video.orientation` | `'vertical'` → moldura 9:16 dimensionada pela altura da tela (`.hero-video` em `globals.css`); `'wide'` → 16:9 na largura do conteúdo. |
-| `externalLinks.support` | Único botão de comando da página: "Fale com a gente" → WhatsApp individual. |
+| `externalLinks.liveGroup` | Único botão de comando da página: "Entre no Grupo" → convite do grupo no WhatsApp. |
 | `externalLinks.appStoreIos` | Loja iOS. Não aparece na página: alimenta o `sameAs` e o `MobileApplication` do JSON-LD e o `/llms.txt`. |
 | `externalLinks.appStoreAndroid` | Idem, para Android. |
-| `externalLinks.liveGroup` | Grupo "Compras ao Vivo" no WhatsApp. Também só no JSON-LD e no `/llms.txt`. |
+| `externalLinks.support` | Atendimento individual no WhatsApp. Não aparece na página: só no JSON-LD e no `/llms.txt`. |
 | `externalLinks.instagram` | Perfil oficial: link do rodapé e `sameAs` do JSON-LD. Não é botão de comando. |
 | `NEXT_PUBLIC_SITE_URL` | Domínio de produção, usado em `metadataBase`, no Open Graph, no `robots.txt`, no `sitemap.xml` e no JSON-LD. Fallback: `https://packtobrazil.com`. **Também controla a indexação** — ver Deploy. |
 

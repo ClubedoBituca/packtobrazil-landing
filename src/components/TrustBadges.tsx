@@ -10,7 +10,7 @@ import { CheckIcon } from './icons'
  * letras; o véu reforçado sozinho não resolvia, e a tinta escura sozinha também
  * não — só as duas juntas.
  */
-const badges = ['Direto na sua porta', 'Sem sair de casa', 'Rastreio pelo app']
+const badges = ['Direto na sua porta', 'Sem sair de casa', 'Produtos originais']
 
 export function TrustBadges({ className = '' }: { className?: string }) {
   return (

@@ -19,7 +19,7 @@ const frameAspect = isVertical ? 'aspect-[9/16]' : 'aspect-video'
 export function VideoFrame({ className = '' }: { className?: string }) {
   return (
     <div
-      className={`mx-auto rounded-[24px] bg-surface-raised/85 p-2 shadow-card ring-1 ring-glass backdrop-blur-[2px] sm:rounded-[32px] sm:p-2.5 ${frameWidth} ${className}`}
+      className={`mx-auto rounded-[24px] bg-surface-raised/85 p-1.5 shadow-card ring-1 ring-glass backdrop-blur-[2px] sm:rounded-[32px] sm:p-2.5 ${frameWidth} ${className}`}
     >
       <div
         className={`video-screen relative w-full overflow-hidden rounded-[18px] sm:rounded-[26px] ${frameAspect}`}

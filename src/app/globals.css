@@ -153,13 +153,25 @@ body {
 /* Vídeo 9:16 dentro de uma tela só.
    Esticado pela largura do container, um 9:16 passa de 500px de altura e sozinho
    já estoura a primeira tela do celular. Aqui a largura sai da ALTURA disponível:
-   os 18rem descontados são o resto da tela 1 (faixa do topo, paddings, logo,
-   headline de três linhas e os intervalos). Assim o quadro encolhe em
-   celular baixo em vez de empurrar a headline para fora, e nunca passa dos 20rem
-   que o player já tinha. `svh` porque as barras do navegador mobile mexem em `vh`. */
+   o valor descontado é o resto da tela 1 (faixa do topo, paddings, logo,
+   headline e os intervalos). Assim o quadro encolhe em celular baixo em vez de
+   empurrar a headline para fora. `svh` porque as barras do navegador mobile
+   mexem em `vh`; `min(100%, …)` porque em tela baixa e larga o cálculo por
+   altura pode pedir mais largura do que o container tem.
+
+   No celular o desconto é de 12,5rem: a primeira tela foi apertada de propósito
+   (padding menor, marca e headline na mesma linha) justamente para o quadro
+   herdar essa altura — em aparelho pequeno o player era a peça que mais sofria.
+   Acima de 640px sobra largura, e a conta volta a ser folgada. */
 @layer components {
   .hero-video {
-    width: clamp(9rem, calc((100svh - 18rem) * 9 / 16), 20rem);
+    width: min(100%, clamp(9rem, calc((100svh - 12.5rem) * 9 / 16), 22rem));
+  }
+
+  @media (min-width: 640px) {
+    .hero-video {
+      width: min(100%, clamp(9rem, calc((100svh - 21rem) * 9 / 16), 22rem));
+    }
   }
 
   /* No desktop o hero é de duas colunas: a coluna do vídeo divide a altura com

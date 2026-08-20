@@ -12,17 +12,22 @@ import { site } from '@/config/site'
  * vez de cortar. Quem se ajusta à altura é o vídeo — ver `.hero-video` em
  * globals.css.
  *
- * As duas composições são bem diferentes de propósito:
+ * Logo e headline andam lado a lado em qualquer tela — é o que sobra de altura
+ * para o vídeo. Empilhados no celular, os dois custavam a altura do logo mais o
+ * intervalo, e ambos tinham de encolher para caber; na linha essa altura vira
+ * uma coluna de texto a menos, e dá para usar logo de 4rem e headline maior.
  *
- * - celular: logo sobre a headline, vídeo embaixo, tudo centralizado. O selo
- *   EUA → Brasil não entra — a altura que ele custava vale mais no vídeo.
- * - desktop: o selo abre a página no topo, centralizado; abaixo, logo e headline
- *   lado a lado ocupando a largura toda de um lado e o vídeo do outro. Empilhar
- *   como no celular deixava metade da tela vazia.
+ * O que muda por breakpoint:
+ *
+ * - celular: só a linha e o vídeo embaixo. O selo EUA → Brasil não entra — a
+ *   altura que ele custava vale mais no vídeo.
+ * - desktop: o selo abre a página no topo, centralizado; abaixo, a linha
+ *   ocupa a largura toda de um lado e o vídeo fica do outro. Empilhar deixava
+ *   metade da tela vazia.
  */
 export function Hero() {
   return (
-    <section className="flex min-h-[calc(100svh-0.25rem)] flex-col items-center justify-center px-5 py-8 sm:py-12 lg:py-14">
+    <section className="flex min-h-[calc(100svh-0.25rem)] flex-col items-center justify-center px-4 py-5 sm:px-5 sm:py-12 lg:py-14">
       <div className="mx-auto w-full max-w-5xl lg:max-w-7xl">
         {/* `RouteFlags` é `inline-flex`, então `mx-auto` não o centraliza —
             quem centraliza é este `flex justify-center`. */}
@@ -30,16 +35,16 @@ export function Hero() {
           <RouteFlags />
         </div>
 
-        <div className="grid w-full items-center justify-items-center gap-6 sm:gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:justify-items-start lg:gap-x-12 xl:gap-x-16">
-          <div className="flex flex-col items-center gap-4 sm:gap-5 lg:w-full lg:flex-row lg:items-center lg:gap-8 xl:gap-10">
+        <div className="grid w-full items-center justify-items-center gap-4 sm:gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:justify-items-start lg:gap-x-12 xl:gap-x-16">
+          <div className="flex w-full items-center justify-center gap-3 sm:gap-6 lg:gap-8 xl:gap-10">
             <Logo
               alt={site.name}
               preload
-              sizes="(min-width: 1280px) 192px, (min-width: 1024px) 144px, (min-width: 640px) 80px, 64px"
-              className="size-16 shrink-0 sm:size-20 lg:size-36 xl:size-48"
+              sizes="(min-width: 1280px) 192px, (min-width: 1024px) 144px, (min-width: 640px) 112px, 64px"
+              className="size-16 shrink-0 sm:size-28 lg:size-36 xl:size-48"
             />
 
-            <h1 className="rise max-w-[18ch] text-center font-display text-[clamp(1.6rem,5.8vw,2.75rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-ink text-balance sm:max-w-[20ch] lg:max-w-[15ch] lg:text-left lg:text-[clamp(2.75rem,4.2vw,4.25rem)]">
+            <h1 className="rise max-w-[22ch] text-left font-display text-[clamp(1.5rem,6.4vw,2.75rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-ink text-balance sm:max-w-[18ch] lg:max-w-[15ch] lg:text-[clamp(2.75rem,4.2vw,4.25rem)]">
               Dos EUA diretamente para o seu endereço,{' '}
               <span className="text-accent">sem sair de casa!</span>
             </h1>
