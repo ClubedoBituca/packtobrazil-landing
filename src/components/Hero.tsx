@@ -50,7 +50,13 @@ export function Hero() {
             </h1>
           </div>
 
-          <VideoFrame className="rise [animation-delay:120ms]" />
+          {/* No desktop o quadro anda um pouco para a esquerda, na direção da
+              headline: a coluna do vídeo é `auto` e a do texto `1fr`, então
+              qualquer mudança de largura ou de gap mexeria também no texto —
+              `relative`/`left` desloca só a pintura e deixa a grade intacta.
+              Não pode ser `translate`: a animação `rise` termina em
+              `transform: none` com `fill: both` e apagaria o deslocamento. */}
+          <VideoFrame className="rise [animation-delay:120ms] lg:relative lg:-left-8 xl:-left-10" />
         </div>
       </div>
     </section>
