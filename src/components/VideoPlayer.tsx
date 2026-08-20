@@ -9,10 +9,16 @@ type VideoPlayerProps = {
 }
 
 /**
- * O vídeo começa sozinho, mudo, assim que a página abre — que é o único autoplay
- * que os navegadores liberam sem gesto do usuário. O primeiro clique devolve o
- * som, volta ao começo e entrega os controles nativos; até lá, um selo "Ativar
- * som" cobre o quadro inteiro, então qualquer toque no vídeo funciona.
+ * O vídeo começa sozinho assim que a página abre. Ele **tenta** começar com som:
+ * na montagem o mudo é retirado e o `play()` é refeito; se o navegador recusar —
+ * que é o caso normal, porque autoplay com áudio exige gesto do usuário —, o
+ * mudo volta na hora e o vídeo segue tocando. Onde o som passa (Chrome com
+ * engajamento alto no domínio, permissão de áudio concedida no site), o
+ * visitante já entra ouvindo, com os controles à mostra.
+ *
+ * Quando o som não passa, o primeiro clique devolve ele, volta ao começo e
+ * entrega os controles nativos; até lá, um selo "Ativar som" cobre o quadro
+ * inteiro, então qualquer toque no vídeo funciona.
  *
  * Volta ao começo de propósito: quem chega, lê a headline e só depois toca já
  * perdeu o que foi dito, e a versão muda serve como prévia, não como exibição.
@@ -44,6 +50,39 @@ export function VideoPlayer({ url, poster }: VideoPlayerProps) {
     video.autoplay = false
     video.pause()
     video.currentTime = 0
+  }, [reducedMotion])
+
+  /* Tentativa de entrar com som. O elemento nasce mudo no HTML de propósito:
+     mudo é o único autoplay garantido, então a reprodução começa de qualquer
+     jeito e o que se arrisca aqui é só o áudio. Tirar o mudo sem gesto do
+     usuário faz o navegador pausar o vídeo e rejeitar o `play()` — daí o
+     `catch` devolver o mudo e retomar. O efeito roda uma vez; se falhar, quem
+     traz o som é o clique no selo. */
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || reducedMotion) return
+    // `reducedMotion` só chega na renderização seguinte à hidratação, porque no
+    // servidor ele é `false` por padrão. Aqui a media query é lida direto para
+    // não arriscar um instante de som em quem pediu para não ter movimento.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let cancelled = false
+    video.muted = false
+    video
+      .play()
+      .then(() => {
+        if (cancelled) return
+        setSoundOn(true)
+      })
+      .catch(() => {
+        if (cancelled) return
+        video.muted = true
+        void video.play().catch(() => {})
+      })
+
+    return () => {
+      cancelled = true
+    }
   }, [reducedMotion])
 
   function handOver() {

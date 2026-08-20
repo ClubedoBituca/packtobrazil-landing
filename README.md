@@ -58,7 +58,9 @@ Logo e headline andam lado a lado em qualquer largura: empilhados no celular, os
 
 O arquivo vive em `public/como-funciona.mp4` e é servido pela Vercel, junto do resto dos assets estáticos. Não há YouTube nem player de terceiros: nenhuma requisição sai do domínio, antes ou depois de o vídeo tocar.
 
-Ele **começa sozinho e mudo** quando a página abre — o único autoplay que os navegadores liberam sem gesto do usuário. Um selo "Ativar som" cobre o quadro inteiro; o clique tira o mudo, volta ao começo e entrega os controles nativos. Com `prefers-reduced-motion: reduce` o autoplay não acontece: o quadro fica no poster, parado, já com os controles à mostra.
+Ele **começa sozinho** quando a página abre, e tenta começar **com som**: na montagem o mudo é retirado e o `play()` é refeito. O normal é o navegador recusar — autoplay com áudio exige gesto do usuário —, e aí o mudo volta na hora, sem interromper a reprodução. Onde o som passa (Chrome com engajamento alto no domínio, permissão de áudio concedida ao site), o visitante já entra ouvindo e com os controles à mostra.
+
+Quando o som não passa, um selo "Ativar som" cobre o quadro inteiro; o clique tira o mudo, volta ao começo e entrega os controles nativos. Com `prefers-reduced-motion: reduce` o autoplay não acontece: o quadro fica no poster, parado, já com os controles à mostra.
 
 Para trocar, exporte em 9:16 (o `<video>` usa `object-cover` e corta o que sobrar) e comprima antes de commitar:
 
