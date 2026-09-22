@@ -39,9 +39,9 @@ export const externalLinks = {
   /** Google Play (Android). */
   appStoreAndroid: 'https://play.google.com/store/apps/details?id=com.company.packtobr',
   /** Grupo "Compras ao Vivo" no WhatsApp — ofertas em tempo real. */
-  liveGroup: 'https://chat.whatsapp.com/EaiBiRafCUiB6yI609deU0',
+  liveGroup: 'https://wa.me/message/XY3BYEOJBMRGO1',
   /** Atendimento individual no WhatsApp. */
-  support: 'https://wa.me/message/GJACGQ2OGLAAE1',
+  support: 'https://wa.me/message/XY3BYEOJBMRGO1',
   /** Perfil oficial — usado no rodapé e no `sameAs` do JSON-LD. */
   instagram: 'https://www.instagram.com/packtobrazil',
 } as const
