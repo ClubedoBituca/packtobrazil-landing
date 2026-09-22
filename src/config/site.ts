@@ -38,10 +38,8 @@ export const externalLinks = {
   appStoreIos: 'https://apps.apple.com/br/app/pack-to-brazil/id6749604073',
   /** Google Play (Android). */
   appStoreAndroid: 'https://play.google.com/store/apps/details?id=com.company.packtobr',
-  /** Grupo "Compras ao Vivo" no WhatsApp — ofertas em tempo real. */
-  liveGroup: 'https://wa.me/message/XY3BYEOJBMRGO1',
-  /** Atendimento individual no WhatsApp. */
-  support: 'https://wa.me/message/XY3BYEOJBMRGO1',
+  /** Conversa no WhatsApp — destino do CTA e canal de atendimento. */
+  whatsapp: 'https://wa.me/message/XY3BYEOJBMRGO1',
   /** Perfil oficial — usado no rodapé e no `sameAs` do JSON-LD. */
   instagram: 'https://www.instagram.com/packtobrazil',
 } as const

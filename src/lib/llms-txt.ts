@@ -18,8 +18,7 @@ import {
 const channels = [
   externalLinks.appStoreIos && `- [Aplicativo iOS](${externalLinks.appStoreIos})`,
   externalLinks.appStoreAndroid && `- [Aplicativo Android](${externalLinks.appStoreAndroid})`,
-  `- [Grupo "Compras ao Vivo" no WhatsApp](${externalLinks.liveGroup}) — ofertas em tempo real`,
-  `- [Atendimento no WhatsApp](${externalLinks.support})`,
+  `- [WhatsApp](${externalLinks.whatsapp}) — atendimento e comunidade`,
   `- [Instagram ${site.instagramHandle}](${externalLinks.instagram})`,
 ].filter(Boolean) as string[]
 

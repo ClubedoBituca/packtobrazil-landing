@@ -30,6 +30,6 @@ marca — não acompanha a paleta.
 
 Links:
 
-Whatsapp : https://wa.me/message/GJACGQ2OGLAAE1
+Whatsapp : https://wa.me/message/XY3BYEOJBMRGO1
 Aplicativo: https://apps.apple.com/br/app/pack-to-brazil/id6749604073
 Instagram: https://www.instagram.com/packtobrazil

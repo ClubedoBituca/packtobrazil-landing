@@ -34,7 +34,7 @@ export function CTASection() {
           segunda linha encostava na primeira e o texto ficava encostado à
           esquerda, porque quem cresce até a borda é o próprio `span`. */}
       <a
-        href={externalLinks.liveGroup}
+        href={externalLinks.whatsapp}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Participe da nossa comunidade no WhatsApp"

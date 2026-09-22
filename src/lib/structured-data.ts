@@ -56,7 +56,7 @@ export function buildStructuredData() {
           {
             '@type': 'ContactPoint',
             contactType: 'customer support',
-            url: externalLinks.support,
+            url: externalLinks.whatsapp,
             availableLanguage: ['Portuguese'],
           },
         ],
@@ -97,13 +97,8 @@ export function buildStructuredData() {
           })),
           {
             '@type': 'ServiceChannel',
-            name: 'Grupo "Compras ao Vivo" no WhatsApp',
-            serviceUrl: externalLinks.liveGroup,
-          },
-          {
-            '@type': 'ServiceChannel',
             name: 'Atendimento por WhatsApp',
-            serviceUrl: externalLinks.support,
+            serviceUrl: externalLinks.whatsapp,
           },
         ],
       },
