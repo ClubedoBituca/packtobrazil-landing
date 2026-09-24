@@ -28,21 +28,23 @@ export function CTASection() {
           quando a segunda tela entra; some no hover, onde o próprio botão já
           responde, e no `prefers-reduced-motion`.
 
-          O rótulo é longo: cabe numa linha nos 27rem que o botão alcança de
-          640px para cima, e quebra em duas no celular, onde a largura é a da
-          tela. Daí o `text-center` e o `leading-tight` no rótulo — sem eles a
-          segunda linha encostava na primeira e o texto ficava encostado à
-          esquerda, porque quem cresce até a borda é o próprio `span`. */}
+          O rótulo é longo e quebra em duas linhas em qualquer tela. Daí o
+          `text-center` e o `leading-tight` no rótulo — sem eles a segunda linha
+          encostava na primeira e o texto ficava encostado à esquerda, porque
+          quem cresce até a borda é o próprio `span` —, o `text-balance`, que
+          divide as linhas em tamanhos parecidos em vez de deixar uma palavra
+          sozinha embaixo, e o `py-3`, que mantém o respiro vertical quando o
+          texto passa da altura mínima. */}
       <a
         href={externalLinks.whatsapp}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Participe da nossa comunidade no WhatsApp"
-        className="cta-pulse group mt-7 flex min-h-[3.75rem] w-full max-w-[27rem] items-center justify-center gap-2.5 rounded-2xl bg-whats px-5 text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:translate-y-0 active:scale-[0.98] sm:mt-8 sm:min-h-[4rem]"
+        aria-label="Clique para receber o guia e o convite para o grupo no WhatsApp"
+        className="cta-pulse group mt-7 flex min-h-[3.75rem] w-full max-w-[27rem] items-center justify-center gap-2.5 rounded-2xl bg-whats px-5 py-3 text-white transition duration-200 hover:-translate-y-0.5 hover:brightness-110 focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface active:translate-y-0 active:scale-[0.98] sm:mt-8 sm:min-h-[4rem]"
       >
         <WhatsAppIcon className="size-6 shrink-0" />
-        <span className="font-display text-base font-bold leading-tight text-center sm:text-lg">
-          Participe da nossa comunidade
+        <span className="font-display text-base font-bold leading-tight text-center text-balance sm:text-lg">
+          Clique para receber o guia e o convite para o grupo
         </span>
         <ArrowRightIcon className="size-[18px] shrink-0 opacity-80 transition-transform duration-200 group-hover:translate-x-0.5" />
       </a>
